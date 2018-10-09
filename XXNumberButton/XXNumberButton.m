@@ -7,6 +7,8 @@
 //
 
 #import "XXNumberButton.h"
+#define hr_weakify(var)   __weak typeof(var) weakSelf = var
+#define hr_strongify(var) __strong typeof(var) strongSelf = var
 
 @interface XXNumberButton()<UITextFieldDelegate>
 
@@ -61,14 +63,31 @@
     }
 }
 
+/**
+ 初始化数据
+ */
+- (void)initData{
+    
+    self.buttonTitleFont = 17;
+    self.inputFieldFont = 15;
+    self.minValue = 1;
+    self.maxValue = NSIntegerMax;
+    self.stepValue = 1;
+    
+    self.increaseTitle = @"+";
+    self.decreaseTitle = @"-";
+    
+    self.isBorder = YES;
+    self.xxBorderColor = [UIColor lightGrayColor];
+    self.xxBorderWidth = 0.5f;
+    
+    self.isRadius = YES;
+    self.numberRadius = 0.0f;
+    
+}
+
 // 初始化界面
 - (void)initUI{
-    
-    _buttonTitleFont = 17;
-    _inputFieldFont = 15;
-    _minValue = 0;
-    _maxValue = NSIntegerMax;
-    self.stepValue = 1;
     
     _increaseBtn = [self createButton];
     _decreaseBtn = [self createButton];
@@ -81,14 +100,13 @@
     _textField.font = [UIFont systemFontOfSize:_inputFieldFont];
     _textField.text = [NSString stringWithFormat:@"%.0f",_minValue];
     _textField.textColor = [UIColor grayColor];
+    _textField.enabled = NO;
     
     [self addSubview:_increaseBtn];
     [self addSubview:_decreaseBtn];
     [self addSubview:_textField];
     
-    self.clipsToBounds = YES;
-    self.layer.cornerRadius = 3.0f;
-    self.backgroundColor = [UIColor whiteColor];
+    [self initData];
 }
 
 // 设置加减 按钮的公共方法
@@ -121,7 +139,7 @@
         // 当按钮为"减号按钮隐藏模式",且输入框值==设定最小值,减号按钮展开
         if (_decreaseHide && number==_minValue) {
             
-            __weak typeof(self)weakSelf = self;
+            hr_weakify(self);
             [UIView animateWithDuration:0.3f animations:^{
                 weakSelf.decreaseBtn.alpha = 1;
                 weakSelf.decreaseBtn.frame = CGRectMake(0, 0, weakSelf.height, weakSelf.height);
@@ -134,9 +152,9 @@
         if (self.blockCurrentNumber) {
             self.blockCurrentNumber([NSString stringWithFormat:@"%@",_textField.text]);
         }
-
+        
     } else {
-
+        
         if (self.blockCurrentNumber) {
             self.blockCurrentNumber([NSString stringWithFormat:@"数据已超过最大数量%.0f",_maxValue]);
         }
@@ -156,7 +174,7 @@
             _textField.hidden = YES;
             _textField.text = [NSString stringWithFormat:@"%.0f",_minValue-1];
             
-            __weak typeof(self)weakSelf = self;
+            hr_weakify(self);
             [UIView animateWithDuration:0.3f animations:^{
                 weakSelf.decreaseBtn.alpha = 0;
                 weakSelf.decreaseBtn.frame = CGRectMake(weakSelf.width - weakSelf.height, 0, weakSelf.height, weakSelf.height);
@@ -238,6 +256,14 @@
     _textField.enabled = editing;
 }
 
+- (void)setCurrentNumber:(CGFloat)currentNumber {
+    _textField.text = [NSString stringWithFormat:@"%.f",currentNumber];
+}
+
+- (CGFloat)currentNumber {
+    return _textField.text.floatValue;
+}
+
 - (void)setMinValue:(CGFloat)minValue{
     _minValue = minValue;
 }
@@ -264,7 +290,7 @@
     if ([_textField.text isNotBlank] == NO || [_textField.text floatValue] < _minValue) {
         _textField.text = _decreaseHide ? [NSString stringWithFormat:@"%.0f",minValueString.floatValue-self.stepValue]:minValueString;
     }
-
+    
     [_textField.text floatValue] > _maxValue ? _textField.text = maxValueString : nil;
     [_textField.text floatValue] < _minValue ? _textField.text = minValueString : nil;
     
@@ -273,6 +299,39 @@
     }
 }
 
+
+- (void)setIsBorder:(BOOL)isBorder{
+    _isBorder = isBorder;
+}
+
+- (void)setXxBorderColor:(UIColor *)xxBorderColor{
+    _xxBorderColor = xxBorderColor;
+    if (self.isBorder) {
+        self.layer.borderColor = xxBorderColor.CGColor;
+        self.textField.layer.borderColor = xxBorderColor.CGColor;
+    }
+}
+
+- (void)setXxBorderWidth:(CGFloat)xxBorderWidth{
+    _xxBorderWidth = xxBorderWidth;
+    if (self.isBorder) {
+        self.layer.borderWidth =  xxBorderWidth;
+        self.textField.layer.borderWidth = xxBorderWidth;
+    }
+}
+
+- (void)setIsRadius:(BOOL)isRadius{
+    _isRadius = isRadius;
+}
+
+- (void)setNumberRadius:(CGFloat)numberRadius{
+    _numberRadius = numberRadius;
+    if (self.isRadius == YES) {
+        self.layer.cornerRadius = numberRadius;
+        self.layer.masksToBounds = YES;
+        self.clipsToBounds = YES;
+    }
+}
 
 @end
 

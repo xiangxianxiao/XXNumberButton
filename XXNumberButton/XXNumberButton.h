@@ -15,13 +15,26 @@ typedef void(^BlockCurrentNumber)(NSString *currentNumber);
 
 @property (nonatomic, copy) BlockCurrentNumber blockCurrentNumber;
 
+// 是否显示边框 边框颜色  边框宽度
+/** default is NO */
+@property (nonatomic, assign) IBInspectable BOOL isBorder;
+@property (nonatomic, strong) IBInspectable UIColor *xxBorderColor;
+@property (nonatomic, assign) IBInspectable CGFloat xxBorderWidth;
+
+//是否显示圆角  圆角
+
+/** default is NO */
+@property (nonatomic, assign) IBInspectable BOOL isRadius;
+@property (nonatomic, assign) IBInspectable CGFloat numberRadius;
+
+
 /** 加按钮背景图片 */
 @property (nonatomic, strong ) IBInspectable UIImage *increaseImage;
 /** 减按钮背景图片 */
 @property (nonatomic, strong ) IBInspectable UIImage *decreaseImage;
-/** 加按钮标题 */
+/** 加按钮标题  默认‘+’ */
 @property (nonatomic, copy   ) IBInspectable NSString *increaseTitle;
-/** 减按钮标题 */
+/** 减按钮标题 默认‘-’  */
 @property (nonatomic, copy   ) IBInspectable NSString *decreaseTitle;
 
 
@@ -36,7 +49,8 @@ typedef void(^BlockCurrentNumber)(NSString *currentNumber);
 @property (nonatomic, strong) IBInspectable UIColor *inputFieldColor;
 
 
-
+/** 当前值, default is 0 */
+@property (nonatomic, assign) CGFloat currentNumber;
 /** 最小值, default is 0 */
 @property (nonatomic, assign ) IBInspectable CGFloat minValue;
 /** 最大值 */
@@ -50,7 +64,7 @@ typedef void(^BlockCurrentNumber)(NSString *currentNumber);
 /** 为YES时,初始化时减号按钮隐藏(饿了么/百度外卖/美团外卖按钮模式), default is NO*/
 @property (nonatomic, assign ) IBInspectable BOOL decreaseHide;
 
-/** 是否可以使用键盘输入, default is YES*/
+/** 是否可以使用键盘输入, default is NO*/
 @property (nonatomic, assign, getter=isEditing) IBInspectable BOOL editing;
 
 
