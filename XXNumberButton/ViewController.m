@@ -31,13 +31,12 @@
     self.numberButton.decreaseTitle = @"减";
     self.numberButton.editing = NO;
     self.numberButton.decreaseHide = NO;
+    
     self.numberButton.blockCurrentNumber = ^(NSString *currentNumber) {
         NSLog(@"%@",currentNumber);
     };
     
     XXNumberButton *number = [[XXNumberButton alloc] initWithFrame:CGRectMake(50, 300, 200, 40)];
-    number.increaseTitle = @"+";
-    number.decreaseTitle = @"-";
     number.maxValue = 10;
     number.minValue = 2;
     number.editing = YES;
