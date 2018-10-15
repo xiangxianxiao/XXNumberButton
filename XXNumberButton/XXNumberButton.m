@@ -71,6 +71,7 @@
     self.buttonTitleFont = 17;
     self.inputFieldFont = 15;
     self.minValue = 1;
+    self.currentNumber = 1;
     self.maxValue = NSIntegerMax;
     self.stepValue = 1;
     
